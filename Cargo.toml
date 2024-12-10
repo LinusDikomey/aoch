@@ -1,0 +1,9 @@
+[package]
+name = "aoch"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+itertools = "0.13.0"
+pathfinding = "4.11.0"
+vecm = { git = "https://github.com/LinusDikomey/vecm", version = "0.1.0" }
