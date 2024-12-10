@@ -51,6 +51,14 @@ impl<T> Grid<T> {
         self.height
     }
 
+    pub fn map<F: FnMut(T) -> U, U>(self, f: F) -> Grid<U> {
+        Grid {
+            buf: IntoIterator::into_iter(self.buf).map(f).collect(),
+            width: self.width,
+            height: self.height,
+        }
+    }
+
     pub fn rows(&self) -> impl Iterator<Item = &[T]> {
         (0..self.height).map(|i| &self.buf[i * self.width..(i + 1) * self.width])
     }
