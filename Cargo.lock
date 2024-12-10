@@ -6,6 +6,7 @@ version = 4
 name = "aoch"
 version = "0.1.0"
 dependencies = [
+ "color-format",
  "itertools",
  "pathfinding",
  "vecm",
@@ -18,6 +19,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ace50bade8e6234aa140d9a2f552bbee1db4d353f69b8217bc503490fc1a9f26"
 
 [[package]]
+name = "color-format"
+version = "0.1.0"
+source = "git+https://github.com/LinusDikomey/color-format#759f7112e65ae62644e64fa5bfe7065d9b7ce794"
+dependencies = [
+ "color-format-macros",
+]
+
+[[package]]
+name = "color-format-macros"
+version = "0.1.0"
+source = "git+https://github.com/LinusDikomey/color-format#759f7112e65ae62644e64fa5bfe7065d9b7ce794"
+dependencies = [
+ "quote",
+ "syn 1.0.109",
+]
+
+[[package]]
 name = "deprecate-until"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -26,7 +44,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "semver",
- "syn",
+ "syn 2.0.90",
 ]
 
 [[package]]
@@ -130,6 +148,17 @@ checksum = "61697e0a1c7e512e84a621326239844a24d8207b4669b41bc18b32ea5cbf988b"
 
 [[package]]
 name = "syn"
+version = "1.0.109"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "72b64191b275b66ffe2469e8af2c1cfe3bafa67b529ead792a6d0160888b4237"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "unicode-ident",
+]
+
+[[package]]
+name = "syn"
 version = "2.0.90"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "919d3b74a5dd0ccd15aeb8f93e7006bd9e14c295087c9896a110f490752bcf31"
@@ -156,7 +185,7 @@ checksum = "4fee6c4efc90059e10f81e6d42c60a18f76588c3d74cb83a0b242a2b6c7504c1"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn",
+ "syn 2.0.90",
 ]
 
 [[package]]

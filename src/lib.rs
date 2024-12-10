@@ -1,3 +1,4 @@
+pub use color_format::*;
 pub use itertools::Itertools;
 pub use std::collections::{BTreeSet, HashMap, HashSet};
 use std::{
@@ -86,6 +87,10 @@ impl<T> Grid<T> {
             ((0..width as i32).contains(&pos.0) && (0..height as i32).contains(&pos.1))
                 .then_some(Vec2i::new(pos.0, pos.1))
         })
+    }
+
+    pub fn pretty(&self) -> PrettyGrid<T> {
+        PrettyGrid::new(self)
     }
 }
 impl<T: Display> Display for Grid<T> {
@@ -204,6 +209,59 @@ impl<T> IndexMut<(usize, usize)> for Grid<T> {
     }
 }
 
+pub struct PrettyGrid<'a, T> {
+    grid: &'a Grid<T>,
+    with_red: Option<Box<dyn Fn((usize, usize)) -> bool + 'a>>,
+    with_green: Option<Box<dyn Fn((usize, usize)) -> bool + 'a>>,
+}
+
+impl<'a, T> PrettyGrid<'a, T> {
+    pub fn new(grid: &'a Grid<T>) -> Self {
+        Self {
+            grid,
+            with_red: None,
+            with_green: None,
+        }
+    }
+    pub fn with_red(mut self, f: impl Fn((usize, usize)) -> bool + 'a) -> Self {
+        self.with_red = Some(Box::new(f));
+        self
+    }
+    pub fn with_green(mut self, f: impl Fn((usize, usize)) -> bool + 'a) -> Self {
+        self.with_green = Some(Box::new(f));
+        self
+    }
+}
+
+impl<T: Display> Display for PrettyGrid<'_, T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let max_cell_len = self
+            .grid
+            .buf
+            .iter()
+            .map(|i| i.to_string().len())
+            .max()
+            .unwrap_or(0);
+        for (y, row) in self.grid.rows().enumerate() {
+            for (x, item) in row.iter().enumerate() {
+                let len = item.to_string().len();
+                if max_cell_len > 1 {
+                    write!(f, "{:<width$}", "", width = max_cell_len - len + 1)?;
+                }
+                if self.with_red.as_ref().map_or(false, |f| f((x, y))) {
+                    cwrite!(f, "#bold<#red<{item}>>")?;
+                } else if self.with_green.as_ref().map_or(false, |f| f((x, y))) {
+                    cwrite!(f, "#bold<#green<{item}>>")?;
+                } else {
+                    cwrite!(f, "#rgb(192,192,192)<{item}>")?;
+                }
+            }
+            writeln!(f)?;
+        }
+
+        Ok(())
+    }
+}
 #[cfg(test)]
 mod tests {
     use super::*;

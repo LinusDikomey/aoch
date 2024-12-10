@@ -7,3 +7,5 @@ edition = "2021"
 itertools = "0.13.0"
 pathfinding = "4.11.0"
 vecm = { git = "https://github.com/LinusDikomey/vecm", version = "0.1.0" }
+color-format = { git = "https://github.com/LinusDikomey/color-format", version = "0.1.0" }
+
