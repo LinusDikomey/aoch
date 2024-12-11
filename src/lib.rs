@@ -143,7 +143,7 @@ impl<T: PartialEq> Grid<T> {
         for item in s {
             if item == sep {
                 if let Some(prev) = prev_width {
-                    assert_eq!(prev, width, "differing widths");
+                    assert_eq!(prev, width, "differing width in line {height}");
                 } else {
                     prev_width = Some(width);
                 }
@@ -155,9 +155,13 @@ impl<T: PartialEq> Grid<T> {
             buf.push(item);
         }
 
+        let final_width = prev_width.expect("got empty grid");
+        assert_eq!(final_width, width, "differing width in line {height}");
+        debug_assert_eq!(buf.len(), height * prev_width.unwrap());
+
         Self {
             buf: buf.into_boxed_slice(),
-            width: prev_width.expect("got empty grid"),
+            width: final_width,
             height,
         }
     }
