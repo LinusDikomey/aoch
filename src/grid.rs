@@ -18,6 +18,44 @@ pub const DIRS8: [(i32, i32); 8] = [
     (1, 1),
 ];
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub enum Side {
+    L,
+    R,
+    T,
+    B,
+}
+impl Side {
+    pub fn dir(self) -> Vec2i {
+        match self {
+            Self::L => Vec2i::new(-1, 0),
+            Self::R => Vec2i::new(1, 0),
+            Self::T => Vec2i::new(0, -1),
+            Self::B => Vec2i::new(0, 1),
+        }
+    }
+
+    #[must_use]
+    pub fn rot_left(self) -> Self {
+        match self {
+            Self::L => Self::B,
+            Self::R => Self::T,
+            Self::T => Self::L,
+            Self::B => Self::R,
+        }
+    }
+
+    #[must_use]
+    pub fn rot_right(self) -> Self {
+        match self {
+            Self::L => Self::T,
+            Self::R => Self::B,
+            Self::T => Self::R,
+            Self::B => Self::L,
+        }
+    }
+}
+
 pub struct Grid<T> {
     buf: Box<[T]>,
     width: usize,
